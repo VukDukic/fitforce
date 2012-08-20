@@ -22,6 +22,9 @@ Installation
 
 Now all the library code is in your org and you're ready to start coding!
 
+Setup
+============
+
    * Recent version of Jespers sfdc oath playground on Github
       * https://github.com/jesperfj/sfdc-oauth-playground
    * Whats been modified to the sfdc_oauth_playground?
