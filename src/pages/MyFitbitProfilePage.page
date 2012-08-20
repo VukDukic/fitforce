@@ -1,0 +1,169 @@
+<apex:page tabStyle="My_Fitbit_Profile__tab" title="My Fitbit Profile" sidebar="true" controller="MyFitbitProfileController" action="{!loadUserData}">
+  <head>
+	<script language="javascript" type="text/javascript" src="{!URLFOR($Resource.jqPlot, 'dist/jquery.min.js')}"></script>
+	<script language="javascript" type="text/javascript" src="{!URLFOR($Resource.jqPlot, 'dist/jquery.jqplot.min.js')}"></script>
+	<link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.jqPlot, 'dist/jquery.jqplot.css')}" />
+	<script type="text/javascript" src="{!URLFOR($Resource.jqPlot, 'dist/plugins/jqplot.barRenderer.min.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.jqPlot, 'dist/plugins/jqplot.categoryAxisRenderer.min.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.jqPlot, 'dist/plugins/jqplot.pointLabels.min.js')}"></script>	
+     <script type="text/javascript">
+         var j$ = jQuery.noConflict();
+		j$(document).ready(function(){
+			generateSleepOverTime();
+		});
+		
+		function generateSleepOverTime()
+		{
+			var values = new Array();
+			var dates = new Array();
+	        <apex:repeat value="{!mySleepingList}" var="d1">
+	        	values.push({!CEILING(VALUE(d1.eventValue)/60)});	
+	        	dates.push(("{!d1.eventdate}").split(" ")[0]);
+	        </apex:repeat>
+		    var plot1 = j$.jqplot('chartdiv', [values], {
+		        // The "seriesDefaults" option is an options object that will
+		        // be applied to all series in the chart.
+		        seriesDefaults:{
+		            renderer:j$.jqplot.BarRenderer,
+		            rendererOptions: {fillToZero: true},
+		            pointLabels: {show: true}
+		        },
+		        // Custom labels for the series are specified with the "label"
+		        // option on the series option.  Here a series option object
+		        // is specified for each series.
+		        series:[
+		            {label:'Hours Slept'},
+		        ],
+		        // Show the legend and put it outside the grid, but inside the
+		        // plot container, shrinking the grid to accomodate the legend.
+		        // A value of "outside" would not shrink the grid and allow
+		        // the legend to overflow the container.
+		        legend: {
+		            show: true,
+		            placement: 'outsideGrid'
+		        },
+		        axes: {
+		            // Use a category axis on the x axis and use our custom ticks.
+		            xaxis: {
+		                renderer: j$.jqplot.CategoryAxisRenderer,
+		                ticks: dates
+		            },
+		            // Pad the y axis just a little so bars can get close to, but
+		            // not touch, the grid boundaries.  1.2 is the default padding.
+		            yaxis: {
+		                tickOptions: {formatString: '%d hours'},
+		                padMin: 0
+		            }
+		        }
+		    });
+	 }
+     </script>	  
+  </head>
+	<chatter:feedWithFollowers rendered="{!NOT(ISNULL(fitbitGroupId))}" id="chatterfeed" entityid="{!fitbitGroupId}"/> 
+	<apex:form >
+		<apex:outputLink rendered="{!NOT(currentUserAuthed)}" value="/apex/AuthPage">Click Here if you would like to Authorize</apex:outputLink>
+		<p/>
+		<apex:outputPanel rendered="{!currentUserAuthed}">
+			<apex:outputText rendered="{!message!=null}" value="Problem: {!message}"/>
+			<apex:pageBlock title="My Device">
+				<apex:pageBlockButtons >
+					<apex:commandButton action="{!writeToChatterStatus}" value="Broadcast Your Results!!" rerender="chatterfeed"/>
+				</apex:pageBlockButtons>
+				<apex:pageMessages showDetail="true"/>
+				<apex:image id="profileImage" url="{!profileImageUrl}" height="100" width="150"/>
+				<apex:image url="{!$Resource.FitbitDevice}"/>
+				<apex:pageBlockSection columns="2">
+					<apex:outputText label="Battery Status" value="{!device.batteryStatus}"/>
+					<apex:outputText label="Device Version" value="{!device.deviceVersion}"/>
+					<apex:outputText label="Id" value="{!device.id}"/>
+					<apex:outputText label="Last Sync Time" value="{!device.lastSyncTime}"/>
+					<apex:outputText label="Device Type" value="{!device.deviceType}"/>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+			<apex:pageBlock title="My Activities Today">
+				<apex:pageBlockSection columns="2" title="Goals Reached">
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Steps" for="steps"/>
+						<apex:image id="steps" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['steps'] >= activitiesMap['goals']['steps']}"/>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Floors" for="floors"/>
+						<apex:image id="floors" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['floors'] >= activitiesMap['goals']['floors']}"/>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Active Score" for="activeScore"/>
+						<apex:image id="activeScore" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['activeScore'] >= activitiesMap['goals']['activeScore']}"/>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Calories Out" for="caloriesOut"/>
+						<apex:image id="caloriesOut" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['caloriesOut'] >= activitiesMap['goals']['caloriesOut']}"/>
+					</apex:pageBlockSectionItem>												
+				</apex:pageBlockSection>
+				<apex:pageBlockSection columns="2" title="Goals">
+					<apex:outputText value="{!activitiesMap['goals']['distance']}" label="Distance"/>
+					<apex:outputText value="{!activitiesMap['goals']['steps']}" label="Steps"/>
+					<apex:outputText value="{!activitiesMap['goals']['floors']}" label="Floors"/>
+					<apex:outputText value="{!activitiesMap['goals']['activeScore']}" label="Active Score"/>
+					<apex:outputText value="{!activitiesMap['goals']['caloriesOut']}" label="Calories Out"/>
+				</apex:pageBlockSection>
+				<apex:pageBlockSection columns="2" title="Summary">
+					<apex:outputText value="{!activitiesMap['summary']['fairlyActiveMinutes']}" label="Fairly Active Minutes"/>
+					<apex:outputText value="{!activitiesMap['summary']['marginalCalories']}" label="Marginal Calories"/>
+					<apex:outputText value="{!activitiesMap['summary']['floors']}" label="Floors"/>
+					<apex:outputText value="{!activitiesMap['summary']['elevation']}" label="Elevation"/>
+					<apex:outputText value="{!activitiesMap['summary']['sedentaryMinutes']}" label="Sedentary Minutes"/>
+					<apex:outputText value="{!activitiesMap['summary']['lightlyActiveMinutes']}" label="Lightly Active Minutes"/>
+					<apex:outputText value="{!activitiesMap['summary']['activityCalories']}" label="Activity Calories"/>
+					<apex:outputText value="{!activitiesMap['summary']['steps']}" label="Steps"/>
+					<apex:outputText value="{!activitiesMap['summary']['veryActiveMinutes']}" label="Very Active Minutes"/>
+					<apex:outputText value="{!activitiesMap['summary']['activeScore']}" label="Active Score"/>
+					<apex:outputText value="{!activitiesMap['summary']['caloriesOut']}" label="Calories Out"/>
+					<apex:pageBlockSectionItem >&nbsp;</apex:pageBlockSectionItem>
+					<apex:pageBlockTable value="{!activitiesMap['summary']['distances']}" var="summaryactivity">
+					    <apex:column value="{!summaryactivity['activity']}" headerValue="Activity"/>
+			    		<apex:column value="{!summaryactivity['distance']}" headerValue="Distance"/>
+					</apex:pageBlockTable>
+				</apex:pageBlockSection>
+				<apex:pageBlockSection columns="1" title="Activities">
+					<apex:pageBlockTable value="{!activitiesMap['activities']}" var="activity">
+					    <apex:column value="{!activity['activityId']}" headerValue="Activity Id"/>
+			    		<apex:column value="{!activity['startTime']}" headerValue="Start Time"/>
+			    		<apex:column value="{!activity['duration']}" headerValue="Duration"/>
+			    		<apex:column value="{!activity['logId']}" headerValue="Log Id"/>
+			    		<apex:column value="{!activity['description']}" headerValue="Description"/>
+			    		<apex:column value="{!activity['isFavorite']}" headerValue="Is Favorite"/>
+			    		<apex:column value="{!activity['name']}" headerValue="Name"/>
+			    		<apex:column value="{!activity['calories']}" headerValue="Calories"/>
+			    		<apex:column value="{!activity['hasStartTime']}" headerValue="Has Start Time"/>
+			    		<apex:column value="{!activity['activityParentId']}" headerValue="Activity Parent Id"/>
+			    		<apex:column value="{!activity['activityParentName']}" headerValue="Activity Parent Name"/>
+					</apex:pageBlockTable>
+				</apex:pageBlockSection>		
+			</apex:pageBlock>
+			<apex:pageBlock title="My Sleep Today">
+				<apex:pageBlockSection columns="1">
+					<apex:outputText value="{!sleepToday.summary.totalMinutesAsleep}" label="Total Minutes Asleep"/>
+					<apex:outputText value="{!sleepToday.summary.totalSleepRecords}" label="Total Sleep Records"/>
+					<apex:outputText value="{!sleepToday.summary.totalTimeInBed}" label="Total Time in Bed"/>
+				</apex:pageBlockSection>
+				<apex:pageBlockTable value="{!sleepToday.sleep}" var="sleepitem">
+			    	<apex:column value="{!sleepitem.awakeningsCount}" headerValue="Awakenings Count"/>
+			    	<apex:column value="{!sleepitem.duration}" headerValue="Duration"/>
+			    	<apex:column value="{!sleepitem.efficiency}" headerValue="Efficiency"/>
+			    	<apex:column value="{!sleepitem.isMainSleep}" headerValue="Is Main Sleep"/>
+			    	<apex:column value="{!sleepitem.logId}" headerValue="Log Id"/>
+			    	<apex:column value="{!sleepitem.minutesAfterWakeup}" headerValue="Minutes After Wakeup"/>
+			    	<apex:column value="{!sleepitem.minutesAsleep}" headerValue="Minutes Asleep"/>
+			    	<apex:column value="{!sleepitem.minutesAwake}" headerValue="Minutes Awake"/>
+			    	<apex:column value="{!sleepitem.minutesToFallAsleep}" headerValue="Minutes To Fall Asleep"/>
+			    	<apex:column value="{!sleepitem.startTime}" headerValue="Start Time"/>
+			    	<apex:column value="{!sleepitem.timeInBed}" headerValue="Time In Bed"/>		
+				</apex:pageBlockTable>
+			</apex:pageBlock>
+			<apex:pageBlock title="Sleep Over Time">
+				<div id="chartdiv"></div>
+			</apex:pageBlock>
+		</apex:outputPanel>
+	</apex:form>
+	<a href="https://github.com/shobyabdi/fitforce"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://a248.e.akamai.net/camo.github.com/e6bef7a091f5f3138b8cd40bc3e114258dd68ddf/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub"/></a>
+</apex:page>

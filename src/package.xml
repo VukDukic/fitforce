@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>AuthController</members>
+        <members>MyFitbitProfileController</members>
+        <members>MyFitbitProfileControllerTest</members>
+        <members>OAuth</members>
+        <members>OAuthTests</members>
+        <members>OauthSigner</members>
+        <members>TestController</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>ApiTestPage</members>
+        <members>AuthPage</members>
+        <members>CompleteAuth</members>
+        <members>MyFitbitProfilePage</members>
+        <name>ApexPage</name>
+    </types>
+    <types>
+        <members>OAuth_Consumer_Playground</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>OAuthService__c</members>
+        <members>OAuth_Token__c</members>
+        <members>Saved_URL__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>API_Tester</members>
+        <members>Authorize</members>
+        <members>My_Fitbit_Profile</members>
+        <members>OAuthService__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>OAuthService__c-OAuth Service Layout</members>
+        <members>OAuth_Token__c-OAuth Token Layout</members>
+        <members>Saved_URL__c-Saved URL Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
+        <members>Fitbit</members>
+        <members>FitbitSSL</members>
+        <name>RemoteSiteSetting</name>
+    </types>
+    <types>
+        <members>FitbitDevice</members>
+        <members>FitbitLogos</members>
+        <members>GoldStar</members>
+        <members>jqPlot</members>
+        <name>StaticResource</name>
+    </types>
+    <version>24.0</version>
+</Package>
