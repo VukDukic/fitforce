@@ -1,0 +1,19 @@
+<project name="Fitforce for Salesforce" default="deployFitforceCheckOnly" basedir="." xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties"/>
+    <property environment="env"/>
+
+    <!-- Deploy the unpackaged set of metadata retrieved with retrieveUnpackaged -->
+    <target name="deployFitforce" description="Deploy Fitforce for Salesforce to your organization">
+      <echo message="Deploying Fitforce..."/>
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="../src"/>
+    </target>
+
+    <!-- Shows check only; never actually saves to the server -->
+    <target name="deployFitforceCheckOnly" description="Deploys Fitforce in check-only mode, without saving changes">
+      <echo message="Run 'ant deployFitforce' to deploy this library to your organization."/> 
+      <echo message="Testing deployment of Fitforce for Salesforce without saving changes..."/>
+      <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="../src" checkOnly="true"/> 
+    </target>
+
+</project>

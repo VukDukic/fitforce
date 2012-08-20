@@ -1,6 +1,27 @@
 fitforce
 ========
 
+Installation
+============
+
+1. Checkout or download the [Fitforce](https://github.com/shobyabdi/fitforce) library from GitHub.
+
+    ```bash
+    $ git clone git@github.com:shobyabdi/fitforce.git
+    ```
+
+1. Install the [Force.com Migration Tool](http://www.salesforce.com/us/developer/docs/daas/Content/forcemigrationtool_install.htm) plugin for Ant, if you don't already have it.
+
+1. Edit `install/build.properties` to insert your Salesforce username and password.  Since you will be using the API to access Salesforce, remember to [append your Security Token](http://www.salesforce.com/us/developer/docs/api/Content/sforce_api_concepts_security.htm#topic-title_login_token) to your password.
+
+1. Open your command line to the `install` folder, then deploy using Ant:
+
+    ```bash
+    $ ant deployFitforce
+    ```
+
+Now all the library code is in your org and you're ready to start coding!
+
    * Recent version of Jespers sfdc oath playground on Github
       * https://github.com/jesperfj/sfdc-oauth-playground
    * Whats been modified to the sfdc_oauth_playground?
