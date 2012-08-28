@@ -6,6 +6,7 @@
     <!-- Deploy the unpackaged set of metadata retrieved with retrieveUnpackaged -->
     <target name="deployFitforce" description="Deploy Fitforce for Salesforce to your organization">
       <echo message="Deploying Fitforce..."/>
+      <echo message="After the deploy finishes, remember to follow the steps in the README.md"/>
       <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployRoot="../src"/>
     </target>
 
