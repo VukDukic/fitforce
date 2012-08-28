@@ -27,6 +27,7 @@ Setup
 
    * Recent version of Jespers sfdc oath playground on Github
       * https://github.com/jesperfj/sfdc-oauth-playground
+      * Not needed as the codebase is included in this repo, but a good reference
    * Whats been modified to the sfdc_oauth_playground?
       * Custom field Fitbit User Id added to OAuth Token
       * OAuth.cls with one line at 154: t.Fitbit_User_Id__c = rp.get('encoded_user_id');
