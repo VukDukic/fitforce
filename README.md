@@ -22,19 +22,8 @@ Installation
 
 Now all the library code is in your org and you're ready to start coding!
 
-Setup
-============
-
-   * Recent version of Jespers sfdc oath playground on Github
-      * https://github.com/jesperfj/sfdc-oauth-playground
-      * Not needed as the codebase is included in this repo, but a good reference
-   * Whats been modified to the sfdc_oauth_playground?
-      * Custom field Fitbit User Id added to OAuth Token
-      * OAuth.cls with one line at 154: t.Fitbit_User_Id__c = rp.get('encoded_user_id');
-      * Thats it!!
-   * Dependencies
-      * Chatter needs to be activated
-   * Add to your Profile
+Profile Setup
+===============
    * Custom App Settings
       * OAuth Consumer Playground: Visible
    * Tab Settings
@@ -42,11 +31,18 @@ Setup
       * My Fitbit Profile: Default On
       * OAuth Services: Default On
       * Authorize: Default On
-   * Verify that your Profile has access to the following objects
+   * Verify that your Profile has read/write permissions to the following objects
       * OAuth Services
       * OAuth Tokens
       * Saved URLs
-   * Create your OAuth Service
+
+Application Setup
+===============
+   * Register your application with Fitbit
+      * https://dev.fitbit.com/apps/new
+      * Provide Application information and hit Register
+      * Once you have registered and have application params, return to Fitforce application
+   * Create your OAuth Service in the App
       * Go to OAuth Services tab
       * Click New
          * Service Name: fitforce
@@ -58,7 +54,7 @@ Setup
             * Authorization URL
       * Hit Save
       * Now you can start signing up users!
-   * Get your user signed up
+   * Get your user signed up in the app
       * Go to My Fitbit Profile tab
       * Click the link: Click Here if you would like to Authorize
       * Make sure select drop down is on fit force and click authorize
@@ -68,3 +64,16 @@ Setup
       * Go back to My Fitbit Profile tab
       * Chatter starts out Hiddem
       * Click Broadcast My Results to show off your results!
+
+
+Additional Info
+============
+   * Recent version of Jespers sfdc oath playground on Github
+      * https://github.com/jesperfj/sfdc-oauth-playground
+      * Not needed as the codebase is included in this repo, but a good reference
+   * Whats been modified to the sfdc_oauth_playground?
+      * Custom field Fitbit User Id added to OAuth Token
+      * OAuth.cls with one line at 154: t.Fitbit_User_Id__c = rp.get('encoded_user_id');
+      * Thats it!!
+   * Dependencies
+      * Chatter needs to be activated
