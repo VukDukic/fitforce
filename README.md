@@ -62,7 +62,7 @@ Application Setup
    * Share with Chatter!!
       * Create a Collaboration Group called "Fitbit Owners" without the quotes
       * Go back to My Fitbit Profile tab
-      * Chatter starts out Hiddem
+      * Chatter starts out Hidden
       * Click Broadcast My Results to show off your results!
 
 
