@@ -85,6 +85,7 @@ public with sharing class MyFitbitProfileController {
 	    	String method = 'GET';
 	        Http h = new Http();
 	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
 	        req.setMethod(method);
 	        req.setEndpoint(url);
 	        OAuth oa = new OAuth();
@@ -104,6 +105,7 @@ public with sharing class MyFitbitProfileController {
 	    	String method = 'GET';
 	        Http h = new Http();
 	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
 	        req.setMethod(method);
 	        req.setEndpoint(url);
 	        OAuth oa = new OAuth();
@@ -124,6 +126,7 @@ public with sharing class MyFitbitProfileController {
 	    	String method = 'GET';
 	        Http h = new Http();
 	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
 	        req.setMethod(method);
 	        req.setEndpoint(url);
 	        OAuth oa = new OAuth();
@@ -147,6 +150,7 @@ public with sharing class MyFitbitProfileController {
 	    	String method = 'GET';
 	        Http h = new Http();
 	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
 	        req.setMethod(method);
 	        req.setEndpoint(url);
 	        OAuth oa = new OAuth();
