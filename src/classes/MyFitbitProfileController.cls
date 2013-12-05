@@ -21,12 +21,20 @@ public with sharing class MyFitbitProfileController {
 	public Sleep sleepToday {get; set;}
 	
 	public Map<String, Object> activitiesMap {get; set;}
+
+	public Map<String, Object> profileMap {get; set;}
+
+	public Map<String, Object> badgesMap {get; set;}
 		
 	public List<TimeSeriesEvent> mySleepingList {get; set;}
 	
 	public String fitbitGroupId {get; set;}
 	
 	public String calloutDate;
+
+	public String profile {get; set;}
+
+	public String badges {get; set;}
 		
 	public MyFitbitProfileController() {
 		String userId = ApexPages.currentPage().getParameters().get('id');
@@ -55,7 +63,9 @@ public with sharing class MyFitbitProfileController {
 	}
 
     public PageReference loadUserData() {
+    	executeProfileGET();
     	executeDeviceGET();
+    	executeBadgesGET();
     	executeActivitiesGET();
     	executeSleepGET();
     	executeMinutesAsleepOverTimeGET();
@@ -77,6 +87,48 @@ public with sharing class MyFitbitProfileController {
 			insert post; 
     	}
 		return null;   	
+    }
+
+    public void executeProfileGET() {
+    	if(currentUserAuthed) {
+    		String url = 'http://api.fitbit.com/1/user/-/profile.json';
+	    	String method = 'GET';
+	        Http h = new Http();
+	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
+	        req.setMethod(method);
+	        req.setEndpoint(url);
+	        OAuth oa = new OAuth();
+	        if(!oa.setService(serviceName)) {
+	        	System.debug(oa.message);
+	        	message=oa.message;
+	        }
+	        oa.sign(req);
+	        HttpResponse res = h.send(req);
+	        profile = res.getBody();	 
+	        profileMap = (Map<String, Object>)JSON.deserializeUntyped(profile);
+    	}
+    }
+
+    public void executeBadgesGET() {
+    	if(currentUserAuthed) {
+    		String url = 'http://api.fitbit.com/1/user/-/badges.json';
+	    	String method = 'GET';
+	        Http h = new Http();
+	        HttpRequest req = new HttpRequest();
+	        req.setTimeout(60000);
+	        req.setMethod(method);
+	        req.setEndpoint(url);
+	        OAuth oa = new OAuth();
+	        if(!oa.setService(serviceName)) {
+	        	System.debug(oa.message);
+	        	message=oa.message;
+	        }
+	        oa.sign(req);
+	        HttpResponse res = h.send(req);
+	        badges = res.getBody();	 
+	        badgesMap = (Map<String, Object>)JSON.deserializeUntyped(badges);
+    	}
     }
 	
     public void executeDeviceGET() {
