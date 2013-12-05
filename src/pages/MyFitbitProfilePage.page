@@ -65,13 +65,22 @@
 		<p/>
 		<apex:outputPanel rendered="{!currentUserAuthed}">
 			<apex:outputText rendered="{!message!=null}" value="Problem: {!message}"/>
-			<apex:pageBlock title="My Device">
-				<apex:pageBlockButtons >
+			<apex:pageBlock mode="maindetail" title="My Profile">
+				<apex:pageBlockButtons location="top">
 					<apex:commandButton action="{!writeToChatterStatus}" value="Broadcast Your Results!!" rerender="chatterfeed"/>
 				</apex:pageBlockButtons>
 				<apex:pageMessages showDetail="true"/>
-				<apex:image id="profileImage" url="{!profileImageUrl}" height="100" width="150"/>
-				<apex:image url="{!$Resource.FitbitDevice}"/>
+				<apex:pageBlockSection columns="2">
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Profile Image" for="profileimage"/>
+						<apex:image id="profileimage" value="{!profileMap['user']['avatar']}" />
+					</apex:pageBlockSectionItem>
+					<apex:outputText value="{!profileMap['user']['fullName']}" label="Name"/>
+					<apex:outputText value="{!profileMap['user']['gender']}" label="Gender"/>
+					<apex:outputText value="{!profileMap['user']['dateOfBirth']}" label="Date Of Birth"/>
+				</apex:pageBlockSection>
+			</apex:pageBlock>
+			<apex:pageBlock mode="maindetail" title="My Device">
 				<apex:pageBlockSection columns="2">
 					<apex:outputText label="Battery Status" value="{!device.batteryStatus}"/>
 					<apex:outputText label="Device Version" value="{!device.deviceVersion}"/>
@@ -80,7 +89,12 @@
 					<apex:outputText label="Device Type" value="{!device.deviceType}"/>
 				</apex:pageBlockSection>
 			</apex:pageBlock>
-			<apex:pageBlock title="My Activities Today">
+			<apex:pageBlock mode="maindetail" title="My Badges">
+				<apex:repeat value="{!badgesMap['badges']}" var="badge1">
+					<apex:image id="profileimage" value="{!badge1['image75px']}" />
+				</apex:repeat>
+			</apex:pageBlock>
+			<apex:pageBlock mode="maindetail" title="My Activities Today">
 				<apex:pageBlockSection columns="2" title="Goals Reached">
 					<apex:pageBlockSectionItem >
 						<apex:outputLabel value="Steps" for="steps"/>
@@ -91,10 +105,6 @@
 						<apex:image id="floors" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['floors'] >= activitiesMap['goals']['floors']}"/>
 					</apex:pageBlockSectionItem>
 					<apex:pageBlockSectionItem >
-						<apex:outputLabel value="Active Score" for="activeScore"/>
-						<apex:image id="activeScore" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['activeScore'] >= activitiesMap['goals']['activeScore']}"/>
-					</apex:pageBlockSectionItem>
-					<apex:pageBlockSectionItem >
 						<apex:outputLabel value="Calories Out" for="caloriesOut"/>
 						<apex:image id="caloriesOut" url="{!$Resource.GoldStar}" rendered="{!activitiesMap['summary']['caloriesOut'] >= activitiesMap['goals']['caloriesOut']}"/>
 					</apex:pageBlockSectionItem>												
@@ -103,7 +113,6 @@
 					<apex:outputText value="{!activitiesMap['goals']['distance']}" label="Distance"/>
 					<apex:outputText value="{!activitiesMap['goals']['steps']}" label="Steps"/>
 					<apex:outputText value="{!activitiesMap['goals']['floors']}" label="Floors"/>
-					<apex:outputText value="{!activitiesMap['goals']['activeScore']}" label="Active Score"/>
 					<apex:outputText value="{!activitiesMap['goals']['caloriesOut']}" label="Calories Out"/>
 				</apex:pageBlockSection>
 				<apex:pageBlockSection columns="2" title="Summary">
@@ -140,7 +149,7 @@
 					</apex:pageBlockTable>
 				</apex:pageBlockSection>		
 			</apex:pageBlock>
-			<apex:pageBlock title="My Sleep Today">
+			<apex:pageBlock mode="maindetail" title="My Sleep Today">
 				<apex:pageBlockSection columns="1">
 					<apex:outputText value="{!sleepToday.summary.totalMinutesAsleep}" label="Total Minutes Asleep"/>
 					<apex:outputText value="{!sleepToday.summary.totalSleepRecords}" label="Total Sleep Records"/>
@@ -160,7 +169,7 @@
 			    	<apex:column value="{!sleepitem.timeInBed}" headerValue="Time In Bed"/>		
 				</apex:pageBlockTable>
 			</apex:pageBlock>
-			<apex:pageBlock title="Sleep Over Time">
+			<apex:pageBlock mode="maindetail" title="Sleep Over Time">
 				<div id="chartdiv"></div>
 			</apex:pageBlock>
 		</apex:outputPanel>
